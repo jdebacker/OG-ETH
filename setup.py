@@ -4,8 +4,8 @@ with open("README.md", "r") as readme_file:
     longdesc = readme_file.read()
 
 setuptools.setup(
-    name="ogzaf",
-    version="0.0.9",
+    name="ogeth",
+    version="0.0.0",
     author="Marcelo LaFleur, Richard W. Evans, and Jason DeBacker",
     license="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     description="Ethiopia Calibration for OG-Core",
