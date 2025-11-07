@@ -16,7 +16,7 @@ class Calibration:
         macro_data_end_year=datetime.datetime(2024, 12, 31),
         demographic_data_path=None,
         output_path=None,
-        update_from_api=False,  # Set True to update from World Bank and UN APIs
+        update_from_api=True,  # Set True to update from World Bank and UN APIs
     ):
         """
         Constructor for the Calibration class.
@@ -43,6 +43,8 @@ class Calibration:
             macro_data_end_year,
             update_from_api=update_from_api,
         )
+        print("Calibrated macro parameters.")
+        print(self.macro_params)
 
         # io matrix and alpha_c
         if p.I > 1:  # no need if just one consumption good
@@ -89,10 +91,11 @@ class Calibration:
 
         # earnings profiles
         self.e = income.get_e_interp(
+            p.E,
             p.S,
-            self.demographic_params["omega_SS"],
-            demog80["omega_SS"],
+            p.J,
             p.lambdas,
+            self.demographic_params["omega_SS"],
             plot_path=output_path,
         )
 

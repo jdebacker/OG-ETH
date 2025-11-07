@@ -246,7 +246,7 @@ def get_macro_params(
         # alpha_T, non-social security benefits as a fraction of GDP
         # source: https://data.imf.org/?sk=78d0bcc1-7a8f-44eb-8a2c-d4e472b8e64b&hide_uv=1
         # alpha_T = Employment-related social benefits expense - Social security benefits expense
-        macro_parameters["alpha_T"] = [0.36 - 0.0]  # 2022 = 0.36
+        macro_parameters["alpha_T"] = [0.30]  # 2022 = 0.36, but max in OG-Core is 0.30
 
         # alpha_G, gov't consumption expenditures as a fraction of GDP
         # source: https://data.imf.org/?sk=23ca1c1d-e6a5-4f18-bc2e-7e215837f971&hide_uv=1
