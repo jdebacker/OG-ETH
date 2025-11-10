@@ -33,12 +33,6 @@ def get_macro_params(
     """
     # initialize a dictionary of parameters
     macro_parameters = {}
-    # baseline date formatted for World Bank data
-    baseline_YYYYQ = (
-        str(data_end_date.year)
-        + "Q"
-        + str(pd.Timestamp(data_end_date).quarter)
-    )
 
     """
     Retrieve data from the World Bank World Development Indicators.
@@ -47,16 +41,11 @@ def get_macro_params(
     # Annual data
     wb_a_variable_dict = {
         "GDP per capita (constant 2015 US$)": "NY.GDP.PCAP.KD",
-        "Real GDP (constant 2015 US$)": "NY.GDP.MKTP.KD",
-        "Nominal GDP (current US$)": "NY.GDP.MKTP.CD",
-        "General government final consumption expenditure (current US$)": "NE.CON.GOVT.CD",
+        # "Real GDP (constant 2015 US$)": "NY.GDP.MKTP.KD",
+        # "Nominal GDP (current US$)": "NY.GDP.MKTP.CD",
+        # "General government final consumption expenditure (current US$)": "NE.CON.GOVT.CD",
     }
-    # Quarterly data
-    wb_q_variable_dict = {
-        "Gross PSD USD - domestic creditors": "DP.DOD.DECD.CR.PS.CD",
-        "Gross PSD USD - external creditors": "DP.DOD.DECX.CR.PS.CD",
-        "Gross PSD Gen Gov - percentage of GDP": "DP.DOD.DECT.CR.GG.Z1",
-    }
+
     if update_from_api:
         try:
             # pull series of interest from the WB using pandas_datareader
@@ -70,90 +59,6 @@ def get_macro_params(
             wb_data_a.rename(
                 columns=dict((y, x) for x, y in wb_a_variable_dict.items()),
                 inplace=True,
-            )
-            # Quarterly data
-            wb_data_q = wb.download(
-                indicator=wb_q_variable_dict.values(),
-                country=country_iso,
-                start=data_start_date,
-                end=data_end_date,
-            )
-            wb_data_q.rename(
-                columns=dict((y, x) for x, y in wb_q_variable_dict.items()),
-                inplace=True,
-            )
-            # Remove the hierarchical index (country and year) of
-            # wb_data_q and create a single row index using year
-            wb_data_q = wb_data_q.reset_index()
-            wb_data_q = wb_data_q.set_index("year")
-
-            # Function to get the latest valid data if baseline_YYYYQ is missing or NaN
-            def get_valid_data(series, baseline_YYYYQ):
-                value = series.get(baseline_YYYYQ, None)
-
-                if pd.isna(value):
-                    latest_non_nan = series.dropna().last_valid_index()
-
-                    if latest_non_nan is not None:
-                        print(
-                            f"Warning: No data for {baseline_YYYYQ}. Using last available quarter: {latest_non_nan}"
-                        )
-                        value = series.get(latest_non_nan, None)
-                    else:
-                        print(
-                            "Warning: No historical data available. Skipping update."
-                        )
-                        value = None
-
-                return value
-
-            # Compute macro parameters from WB data
-            macro_parameters["initial_debt_ratio"] = get_valid_data(
-                pd.Series(wb_data_q["Gross PSD Gen Gov - percentage of GDP"])
-                / 100,
-                baseline_YYYYQ,
-            )
-            print(
-                f"initial_debt_ratio updated from World Bank API: {macro_parameters['initial_debt_ratio']}"
-            )
-
-            # Compute initial_foreign_debt_ratio safely
-            if (
-                "Gross PSD USD - external creditors" in wb_data_q.columns
-                and "Gross PSD USD - domestic creditors" in wb_data_q.columns
-            ):
-
-                total_debt = (
-                    wb_data_q["Gross PSD USD - domestic creditors"]
-                    + wb_data_q["Gross PSD USD - external creditors"]
-                )
-
-                # Avoid division by zero
-                wb_data_q["foreign_debt_ratio"] = wb_data_q[
-                    "Gross PSD USD - external creditors"
-                ] / total_debt.replace(0, np.nan)
-
-                macro_parameters["initial_foreign_debt_ratio"] = (
-                    get_valid_data(
-                        wb_data_q["foreign_debt_ratio"], baseline_YYYYQ
-                    )
-                )
-            else:
-                print(
-                    "Warning: Missing debt variables in World Bank data. Skipping update for initial_foreign_debt_ratio."
-                )
-
-            print(
-                f"initial_foreign_debt_ratio updated from World Bank API: {macro_parameters['initial_foreign_debt_ratio']}"
-            )
-
-            # Compute zeta_D safely
-            macro_parameters["zeta_D"] = [
-                macro_parameters["initial_foreign_debt_ratio"]
-            ]  # Since it's the same formula, we use the same calculated value
-
-            print(
-                f"zeta_D updated from World Bank API: {macro_parameters['zeta_D']}"
             )
 
             # Compute annual GDP growth safely
@@ -185,7 +90,7 @@ def get_macro_params(
 
     """
     Retrieve labour share data from the United Nations ILOSTAT Data API
-    (see https://rshiny.ilo.org/dataexplorer9/?lang=en)
+    (see https://rplumber-test.ilo.org)
     The series code is SDG_1041_NOC_RT_A (capital share)
     Labor share (gamma) = 1 - capital share
     If this fails we will not update gamma in 'default_parameters.json'
@@ -239,26 +144,48 @@ def get_macro_params(
         print("Not updating from ILOSTAT API")
 
     """
-    Calibrate parameters from IMF data
+    Calibrate parameters from IMF and other sources
     """
 
     if update_from_api:
-        # alpha_T, non-social security benefits as a fraction of GDP
-        # source: https://data.imf.org/?sk=78d0bcc1-7a8f-44eb-8a2c-d4e472b8e64b&hide_uv=1
-        # alpha_T = Employment-related social benefits expense - Social security benefits expense
-        macro_parameters["alpha_T"] = [0.30]  # 2022 = 0.36, but max in OG-Core is 0.30
+        # alpha_T, non-social security transfers (grants, subsidies, and other transfers) as a fraction of GDP
+        # source: IMF GFS (12.0.0), indicator G271_T, Budgetary central government
+        # source link: https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.STA:GFS_SOO(12.0.0)&INDICATOR=G271_T
+        # 2023 = 3.38% of GDP
+        macro_parameters["alpha_T"] = [0.034]
 
-        # alpha_G, gov't consumption expenditures as a fraction of GDP
-        # source: https://data.imf.org/?sk=23ca1c1d-e6a5-4f18-bc2e-7e215837f971&hide_uv=1
-        # alpha_G = Expense	- Interest expense - Social benefits expense
-        macro_parameters["alpha_G"] = [0.324 - 0.047 - 0.036]  # 2022 = 0.241
+        # alpha_G, total government expenditure as a fraction of GDP
+        # source: IMF WEO (9.0.0), indicator GGX, General government expenditure (% of GDP)
+        # source link: https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.RES:WEO(9.0.0)&INDICATOR=GGX
+        # 2024 = 9.538% of GDP
+        macro_parameters["alpha_G"] = [0.095]
+
+        # initial_debt_ratio, gross general government debt as a fraction of GDP
+        # source: from the IMF WEO, Series ETH.GGXWDG_NGDP.A — Gross general government debt (% of GDP).
+        # The IMF value annualizes Ethiopia’s fiscal year data (July–June) to the calendar year.
+        # 2023/24 (mapped to CY2024) = 32.66% of GDP
+        macro_parameters["initial_debt_ratio"] = 0.327
+
+        # initial_foreign_debt_ratio, share of external debt in total public sector debt
+        # source: Ministry of Finance, Public Sector Debt Portfolio Analysis No. 25 (2019/20–2023/24)
+        # source link: https://www.mofed.gov.et/resources/bulletin/
+        # FY2023/24: external debt USD 28.89 billion; total public debt USD 68.86 billion → 42%
+        macro_parameters["initial_foreign_debt_ratio"] = 0.42
+
+        # zeta_D, share of new government debt issues purchased by foreign creditors
+        # source: Ministry of Finance, Public Sector Debt Portfolio Analysis No. 25 (2019/20–2023/24), Table 1
+        # source link: https://www.mofed.gov.et/resources/bulletin/
+        # FY2023/24: Δ total debt = +5.53 bn; Δ external debt = +0.64 bn → external share ≈ 11.6%
+        # Caution: there is significant annual variatiot: 2020/21 = 49.9, 2021/22 = –152.5, 2022/23 = 5.0, 2023/24 = 11.6
+        # We use the latest year.
+        macro_parameters["zeta_D"] = [0.12]
 
         """"
         Esimate the discount on sovereign yields relative to private debt
         Follow the methodology in Li, Magud, Werner, Witte (2021)
         available at:
         https://www.imf.org/en/Publications/WP/Issues/2021/06/04/The-Long-Run-Impact-of-Sovereign-Yields-on-Corporate-Yields-in-Emerging-Markets-50224
-        discussion is here: https://github.com/EAPD-DRB/OG-ETH/issues/22
+        discussion is here: https://github.com/EAPD-DRB/OG-ZAF/issues/22
         Steps:
         1) Generate modelled corporate yields (corp_yhat) for a range of
         sovereign yields (sov_y)  using the estimated equation in col 2 of
