@@ -13,7 +13,7 @@ from ogcore import demographics as demog
 
 
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
-UN_COUNTRY_CODE = "710"
+UN_COUNTRY_CODE = "231"  # Ethiopia
 plot_path = os.path.join(CUR_DIR, "book", "content", "calibration", "images")
 YEAR_TO_PLOT = 2023
 # update path for demographics graphdiag plots
@@ -45,7 +45,7 @@ fert_rates, fig = demog.get_fert(
     totpers=100,
     min_age=0,
     max_age=99,
-    country_id="710",
+    country_id=UN_COUNTRY_CODE,
     start_year=YEAR_TO_PLOT,
     end_year=YEAR_TO_PLOT,
     graph=True,
@@ -58,7 +58,7 @@ mort_rates, _, fig = demog.get_mort(
     totpers=100,
     min_age=0,
     max_age=99,
-    country_id="710",
+    country_id=UN_COUNTRY_CODE,
     start_year=YEAR_TO_PLOT,
     end_year=YEAR_TO_PLOT,
     graph=True,
@@ -77,7 +77,7 @@ imm_rates, fig = demog.get_imm_rates(
     mort_rates=None,
     infmort_rates=None,
     pop_dist=None,
-    country_id="710",
+    country_id=UN_COUNTRY_CODE,
     start_year=YEAR_TO_PLOT,
     end_year=YEAR_TO_PLOT + 50,
     graph=True,
