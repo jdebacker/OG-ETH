@@ -1210,7 +1210,7 @@
     "g_RM": [
         0.0
     ],
-    "debt_ratio_ss": 2.0,
+    "debt_ratio_ss": 0.6,
     "initial_debt_ratio": 0.314,
     "initial_Kg_ratio": 0.0,
     "r_gov_scale": [
@@ -4747,7 +4747,7 @@
     ],
     "budget_balance": false,
     "baseline_spending": false,
-    "start_year": 2025,
+    "start_year": 2026,
     "tax_func_type": "linear",
     "labor_income_tax_noncompliance_rate": [
         [
