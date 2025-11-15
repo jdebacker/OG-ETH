@@ -8,7 +8,7 @@ jupytext:
 kernelspec:
   display_name: Python 3
   language: python
-  name: ogeth-dev
+  name: python3
 ---
 
 (Chap_LfEarn)=
