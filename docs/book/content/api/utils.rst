@@ -14,4 +14,4 @@ ogeth.utils
   :members: init_poolmanager
 
 .. automodule:: ogeth.utils
-  :members: get_legacy_session
+  :members: get_legacy_session, is_connected

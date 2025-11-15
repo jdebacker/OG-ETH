@@ -9,4 +9,4 @@ ogeth.input_output
 ------------------------------------------
 
 .. automodule:: ogeth.input_output
-  :members: get_alpha_c, get_io_matrix
+  :members: read_SAM, get_alpha_c, get_io_matrix
