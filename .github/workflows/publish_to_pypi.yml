@@ -8,15 +8,15 @@ on:
 jobs:
   deploy:
     name: Publish to PyPI
-    if: github.repository == 'EAPD-DRB/OG-PHL'
+    if: github.repository == 'EAPD-DRB/OG-ETH'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - name: Build package
         shell: bash -l {0}
         run: |
