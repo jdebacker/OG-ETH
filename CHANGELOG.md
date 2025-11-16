@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- asdf
+- Fixes black formatting in `income.py` and `input_output.py`
+- Fixes a typo in `constants.py`
+- Fixes an error in the `deploy_docs.yml` and `docs_check.yml` files
+- Adds Jason as a core maintainer in `intro.md`. This also allows us to see if the documentation GH Actions work.
+- Removed `test_income.py` and `test_input_output.py` tests
 
 ## [0.0.1] - 2025-11-16 12:30:00
 
