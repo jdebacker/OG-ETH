@@ -41,8 +41,7 @@ envs/
 *.coverage*
 *coverage.xml*
 docs/book/_build/*
-*/OG-ETH_example_plots/*
-*ogeth_example_output.csv
-*/OG-ETH-Example/*
-*/OG-ETH-MultiExample/*
+*/OG-*_example_plots/*
+*og*_example_output.csv
+*/OG-*-Example/*
 *un_api_token.txt

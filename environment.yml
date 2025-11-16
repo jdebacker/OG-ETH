@@ -24,6 +24,8 @@ dependencies:
 - pylint
 - coverage
 - requests
+- fsspec
+- aiohttp
 - xlwt
 - statsmodels
 - linearmodels
@@ -36,6 +38,6 @@ dependencies:
   - openpyxl>=3.1.2
   - pandas-datareader
   - linecheck
-  - ogcore
+  - ogcore>=0.14.11
   - sphinx-exercise
   - sphinx-proof

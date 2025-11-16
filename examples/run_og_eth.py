@@ -14,6 +14,7 @@ from ogcore import output_plots as op
 from ogcore.execute import runner
 from ogcore.utils import safe_read_pickle
 from ogeth.utils import is_connected
+import ogcore
 
 # Use a custom matplotlib style file for plots
 plt.style.use("ogcore.OGcorePlots")
@@ -44,6 +45,11 @@ def main():
         output_base=base_dir,
     )
     # Update parameters for baseline from default json file
+    # with (
+    #     files("ogeth")
+    #     .joinpath("ogeth_default_parameters.json")
+    #     .open("r") as file
+    # ):
     with (
         files("ogeth")
         .joinpath("ogeth_default_parameters.json")
@@ -54,7 +60,7 @@ def main():
     # Update parameters from calibrate.py Calibration class
     if is_connected():  # only update if connected to internet
         c = Calibration(
-            p, update_from_api=False
+            p, update_from_api=True
         )  # =True will update data from online sources
         updated_params = c.get_dict()
         p.update_specifications(updated_params)
@@ -77,7 +83,7 @@ def main():
 
     # Parameter change for the reform run
     updated_params_ref = {
-        "cit_rate": [[0.30]],
+        "cit_rate": [[0.25]],  # decrease CIT rate to 25%
     }
     p2.update_specifications(updated_params_ref)
 
