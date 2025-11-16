@@ -24,6 +24,8 @@ dependencies:
 - pylint
 - coverage
 - requests
+- fsspec
+- aiohttp
 - xlwt
 - statsmodels
 - linearmodels
