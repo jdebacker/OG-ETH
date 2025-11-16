@@ -4,21 +4,21 @@ on:
     branches:
       - main
     paths:
+      - '**.md'
+      - './docs/**.py'
       - './docs/**.png'
-      - './docs/book/content/calibration/images/**.png'
-      - './docs/README.md'
       - './docs/book/**.yml'
       - './docs/book/**.bib'
-      - '**.md'
+      - './docs/book/content/calibration/images/**.png'
       - './docs/book/content/api/**.rst'
-      - './ogphl/**.py'
+      - './ogeth/**.py'
 jobs:
   build-and-deploy:
-    if: github.repository == 'EAPD-DRB/OG-PHL'
+    if: github.repository == 'EAPD-DRB/OG-ETH'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
@@ -26,18 +26,18 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           miniconda-version: "latest"
-          activate-environment: ogphl-dev
+          activate-environment: ogeth-dev
           environment-file: environment.yml
-          python-version: "3.12"
+          python-version: "3.13"
           auto-activate-base: false
 
       - name: Build # Build Jupyter Book
         shell: bash -l {0}
         run: |
-          pip install jupyter-book>=0.11.3
+          pip install jupyter-book<2.0.0
           pip install sphinxcontrib-bibtex>=2.0.0
           pip install -e .
-          python -m ipykernel install --user --name=ogphl-dev
+          python -m ipykernel install --user --name=ogeth-dev
           jb build ./docs/book
 
       - name: Deploy
