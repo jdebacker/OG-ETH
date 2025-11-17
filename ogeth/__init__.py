@@ -8,4 +8,4 @@ from ogeth.input_output import *
 from ogeth.macro_params import *
 from ogeth.utils import *
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
