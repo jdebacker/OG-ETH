@@ -1,0 +1,48 @@
+name: Build and Deploy Jupyter Book documentation
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - './docs/**.py'
+      - './docs/**.png'
+      - './docs/book/**.yml'
+      - './docs/book/**.bib'
+      - './docs/book/content/calibration/images/**.png'
+      - './docs/book/content/api/**.rst'
+      - './ogeth/**.py'
+jobs:
+  build-and-deploy:
+    if: github.repository == 'EAPD-DRB/OG-ETH'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniconda-version: "latest"
+          activate-environment: ogeth-dev
+          environment-file: environment.yml
+          python-version: "3.13"
+          auto-activate-base: false
+
+      - name: Build # Build Jupyter Book
+        shell: bash -l {0}
+        run: |
+          pip install "jupyter-book<2.0.0"
+          pip install "sphinxcontrib-bibtex>=2.0.0"
+          pip install -e .
+          python -m ipykernel install --user --name=ogeth-dev
+          jb build ./docs/book
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs/book/_build/html # The folder the action should deploy.

@@ -3,7 +3,7 @@
 
 | | |
 | --- | --- |
-| Org | [![United Nations DESA](https://img.shields.io/badge/United%20Nations%20DESA-blue)](https://www.un.org/en/desa) [![PSL cataloged](https://img.shields.io/badge/PSL-cataloged-a0a0a0.svg)](https://www.PSLmodels.org) [![OS License: CC0-1.0](https://img.shields.io/badge/OS%20License-CC0%201.0-yellow)](https://github.com/EAPD-DRB/OG-ETH/blob/main/LICENSE) |
+| Org | [![United Nations DESA](https://img.shields.io/badge/United%20Nations%20DESA-blue)](https://www.un.org/en/desa) [![PSL cataloged](https://img.shields.io/badge/PSL-cataloged-a0a0a0.svg)](https://www.PSLmodels.org) [![OS License: CC0-1.0](https://img.shields.io/badge/OS%20License-CC0%201.0-yellow)](https://github.com/EAPD-DRB/OG-ETH/blob/main/LICENSE) [![Jupyter Book Badge](https://raw.githubusercontent.com/jupyter-book/jupyter-book/next/docs/media/images/badge.svg)](https://eapd-drb.github.io/OG-ETH) |
 | Package | [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/release/python-3129/) [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![PyPI Latest Release](https://img.shields.io/pypi/v/ogeth.svg)](https://pypi.org/project/ogeth/) [![PyPI Downloads](https://img.shields.io/pypi/dm/ogeth.svg?label=PyPI%20downloads)](https://pypi.org/project/ogeth/) |
 | Testing | ![example event parameter](https://github.com/EAPD-DRB/OG-ETH/actions/workflows/build_and_test.yml/badge.svg?branch=main) ![example event parameter](https://github.com/EAPD-DRB/OG-ETH/actions/workflows/deploy_docs.yml/badge.svg?branch=main) ![example event parameter](https://github.com/EAPD-DRB/OG-ETH/actions/workflows/check_format.yml/badge.svg?branch=main) [![Codecov](https://codecov.io/gh/EAPD-DRB/OG-ETH/branch/main/graph/badge.svg)](https://codecov.io/gh/EAPD-DRB/OG-ETH) |
 
@@ -19,7 +19,7 @@
 (Sec_CoreMaintainers)=
 ## Core Maintainers
 
-Marcelo LaFleur (GitHub handle [@SeaCelo](https://github.com/SeaCelo)) and [Richard W. Evans](https://sites.google.com/site/rickecon/) (GitHub handle [@rickecon](https://github.com/rickecon)) are the core maintainers of `OG-ETH`. If you have questions about or contributions to the model or repository, please submit a GitHub "Issue" described in the {ref}`Sec_GitHubIssue` subsection or "Pull Request" as described in the {ref}`Sec_GitHubPR` subsection of the {ref}`Sec_Workflow` section of the `OG-ETH` {ref}`Chap_ContribGuide`.
+Marcelo LaFleur (GitHub handle [@SeaCelo](https://github.com/SeaCelo)), [Richard W. Evans](https://sites.google.com/site/rickecon/) (GitHub handle [@rickecon](https://github.com/rickecon)), and [Jason DeBacker](https://jasondebacker.com/)(GitHub handle [@jdebacker](https://github.com/jdebacker)) are the core maintainers of `OG-ETH`. If you have questions about or contributions to the model or repository, please submit a GitHub "Issue" described in the {ref}`Sec_GitHubIssue` subsection or "Pull Request" as described in the {ref}`Sec_GitHubPR` subsection of the {ref}`Sec_Workflow` section of the `OG-ETH` {ref}`Chap_ContribGuide`.
 
 
 (Sec_Disclaimer)=

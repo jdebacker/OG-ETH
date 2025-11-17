@@ -1,6 +1,6 @@
 *.pyc
 MANIFEST
-build/*
+*build/*
 dist/*
 *.cache/
 .coverage
@@ -44,4 +44,4 @@ docs/book/_build/*
 */OG-*_example_plots/*
 *og*_example_output.csv
 */OG-*-Example/*
-**/un_api_token.txt
+*un_api_token.txt

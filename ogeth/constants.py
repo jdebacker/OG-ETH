@@ -347,7 +347,7 @@ CONS_DICT = {
         "cpadm",
         "ceduc",
         "cheal",
-        "cosrv"
+        "cosrv",
         "celec",
         "cwatr",
     ],
