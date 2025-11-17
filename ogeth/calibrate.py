@@ -95,7 +95,7 @@ class Calibration:
             p.S,
             p.J,
             p.lambdas,
-            self.demographic_params["omega_SS"],
+            demog80["omega_SS"],
             plot_path=output_path,
         )
 

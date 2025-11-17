@@ -1210,8 +1210,8 @@
     "g_RM": [
         0.0
     ],
-    "debt_ratio_ss": 2.0,
-    "initial_debt_ratio": 0.314,
+    "debt_ratio_ss": 0.6,
+    "initial_debt_ratio": 0.327,
     "initial_Kg_ratio": 0.0,
     "r_gov_scale": [
         0.24484763593657818
@@ -1235,7 +1235,7 @@
     ],
     "tau_c": [
         [
-            0.15
+            0.18
         ]
     ],
     "delta_tau_annual": [
