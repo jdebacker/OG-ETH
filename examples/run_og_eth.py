@@ -70,28 +70,6 @@ def main():
     runner(p, time_path=True, client=client)
     print("run time = ", time.time() - start_time)
 
-    # base_ss = safe_read_pickle(os.path.join(base_dir, "SS", "SS_vars.pkl"))
-    # print("SS tax to GDP ratio: ", base_ss["total_tax_revenue"] / base_ss["Y"])
-
-    # Plot D/Y ratio over time
-    base_tpi = safe_read_pickle(os.path.join(base_dir, "TPI", "TPI_vars.pkl"))
-    plt.plot(base_tpi["D"][:40] / base_tpi["Y"][:40])
-    plt.title("Debt to GDP Ratio Over Time")
-    plt.xlabel("Time Periods")
-    plt.ylabel("D/Y")
-    plt.savefig(os.path.join(save_dir, "debt_to_gdp_ratio.png"))
-
-    # plot tax revenue to gdp and government spending to gdp
-    plt.figure()
-    plt.plot(base_tpi["total_tax_revenue"][:40] / base_tpi["Y"][:40], label="Tax Revenue to GDP")
-    plt.plot((base_tpi["G"][:40] + base_tpi["TR"][:40]) / base_tpi["Y"][:40], label="Government Spending to GDP")
-    plt.title("Government Finance Ratios Over Time")
-    plt.xlabel("Time Periods")
-    plt.ylabel("Ratio")
-    plt.savefig(os.path.join(save_dir, "outlays_rev_to_gdp_ratio.png"))
-
-    quit()
-
     """
     Run reform policy
     ---------------------------------------------------------------------------
