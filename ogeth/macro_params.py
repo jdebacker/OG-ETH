@@ -152,7 +152,9 @@ def get_macro_params(
         # source: IMF GFS (12.0.0), indicator G271_T, Budgetary central government
         # source link: https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.STA:GFS_SOO(12.0.0)&INDICATOR=G271_T
         # 2023 = 3.38% of GDP
-        macro_parameters["alpha_T"] = [0.034 + 0.016]  # including social benefits of 1.6% of GDP
+        macro_parameters["alpha_T"] = [
+            0.034 + 0.016
+        ]  # including social benefits of 1.6% of GDP
 
         # alpha_G, total government expenditure as a fraction of GDP
         # source: IMF WEO (9.0.0), indicator GGX, General government expenditure (% of GDP)
