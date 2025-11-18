@@ -299,7 +299,6 @@ Create dictionaries to map micro categories to broad groups
 """
 CONS_DICT = {
     "Food": [
-        "cceri",
         "cmaiz",
         "crice",
         "cocer",
@@ -372,6 +371,7 @@ PROD_DICT = {
         "aoliv",
         "afore",
         "afish",
+        "amine",
     ],
     "Energy": [
         "aelec",
@@ -390,8 +390,16 @@ PROD_DICT = {
         "aosrv",
     ],
     "Secondary Ex Energy": [
-        "amine",
+        "afood",
+        "abeve",
+        "atext",
+        "awood",
+        "achem",
+        "anmet",
+        "ametl",
+        "amach",
+        "aoman",
         "awatr",
-        "acons",
+        "acons"
     ],
 }

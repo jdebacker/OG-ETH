@@ -152,7 +152,7 @@ def get_macro_params(
         # source: IMF GFS (12.0.0), indicator G271_T, Budgetary central government
         # source link: https://data.imf.org/en/Data-Explorer?datasetUrn=IMF.STA:GFS_SOO(12.0.0)&INDICATOR=G271_T
         # 2023 = 3.38% of GDP
-        macro_parameters["alpha_T"] = [0.034]
+        macro_parameters["alpha_T"] = [0.034 + 0.016]  # including social benefits of 1.6% of GDP
 
         # alpha_G, total government expenditure as a fraction of GDP
         # source: IMF WEO (9.0.0), indicator GGX, General government expenditure (% of GDP)
@@ -181,7 +181,7 @@ def get_macro_params(
         macro_parameters["zeta_D"] = [0.12]
 
         """"
-        Esimate the discount on sovereign yields relative to private debt
+        Estimate the discount on sovereign yields relative to private debt
         Follow the methodology in Li, Magud, Werner, Witte (2021)
         available at:
         https://www.imf.org/en/Publications/WP/Issues/2021/06/04/The-Long-Run-Impact-of-Sovereign-Yields-on-Corporate-Yields-in-Emerging-Markets-50224

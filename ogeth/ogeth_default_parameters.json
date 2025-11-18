@@ -1177,20 +1177,20 @@
         0.040000000000000036,
         0.040000000000000036
     ],
-    "initial_foreign_debt_ratio": 0.95,
+    "initial_foreign_debt_ratio": 0.42,
     "zeta_D": [
-        0.95
+        0.12
     ],
     "zeta_K": [
-        0.95
+        0.65
     ],
     "tG1": 20,
     "tG2": 256,
     "alpha_T": [
-        0.3
+        0.05
     ],
     "alpha_G": [
-        0.24100000000000002
+        0.095
     ],
     "alpha_I": [
         0.0
@@ -1211,7 +1211,7 @@
         0.0
     ],
     "debt_ratio_ss": 0.6,
-    "initial_debt_ratio": 0.314,
+    "initial_debt_ratio": 0.327,
     "initial_Kg_ratio": 0.0,
     "r_gov_scale": [
         0.24484763593657818
@@ -1226,7 +1226,7 @@
     ],
     "c_corp_share_of_assets": 0.55,
     "adjustment_factor_for_cit_receipts": [
-        0.30909090909090914
+        0.2
     ],
     "inv_tax_credit": [
         [
@@ -1235,7 +1235,7 @@
     ],
     "tau_c": [
         [
-            0.18
+            0.07
         ]
     ],
     "delta_tau_annual": [
@@ -103759,21 +103759,21 @@
     "etr_params": [
         [
             [
-                0.25
+                0.03
             ]
         ]
     ],
     "mtrx_params": [
         [
             [
-                0.25
+                0.2
             ]
         ]
     ],
     "mtry_params": [
         [
             [
-                0.25
+                0.2
             ]
         ]
     ],
