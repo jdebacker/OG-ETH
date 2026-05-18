@@ -25,7 +25,7 @@ class TestOfflineMode:
     """Tests for update_from_api=False (the default)."""
 
     def test_single_sector_returns_identity_values(self):
-        """Single-sector offline: get_dict() returns alpha_c=[1.0] and io_matrix=[[1.0]]."""
+        """Single-sector offline: alpha_c=[1.0], io_matrix=[[1.0]]."""
         p = _make_mock_p(I=1, M=1)
         c = Calibration(p, update_from_api=False)
 
@@ -56,7 +56,7 @@ class TestOfflineMode:
         assert "initial_debt_ratio" not in d
 
     def test_multi_sector_omits_alpha_c_and_io_matrix(self):
-        """Multi-sector offline: alpha_c and io_matrix are None, omitted from get_dict()."""
+        """Multi-sector offline: alpha_c and io_matrix omitted."""
         p = _make_mock_p(I=5, M=4)
         c = Calibration(p, update_from_api=False)
 

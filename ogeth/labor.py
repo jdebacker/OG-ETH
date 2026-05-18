@@ -80,7 +80,7 @@ def compute_labor_moments(df, S=80):
     )
     # give column name to hours
     by_age.columns = ["hours"]
-    # drop with indices that are in ['00-04', '05-09', '10-14', '14-Oct', '9-May']
+    # drop indices in ['00-04', '05-09', '10-14', '14-Oct', '9-May']
     by_age = by_age.drop(["00-04", "05-09", "10-14", "14-Oct", "9-May"])
     # also drop age 15-19 since not in model
     # by_age = by_age.drop('15-19')

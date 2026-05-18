@@ -125,7 +125,8 @@ def main():
         imm_rates, np.tile(imm_rates[-1, :], (47, 1)), axis=0
     )
 
-    # Adjust immigration rates -- phase in and out a temporary increase in immigration of 20-40 year olds
+    # Adjust immigration rates -- phase in and out a temporary
+    # increase in immigration of 20-40 year olds
     adj_imm_rates = imm_rates
     adj_imm_rates[0, 20:40] += 0.0
     adj_imm_rates[1, 20:40] += 0.005

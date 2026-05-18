@@ -78,7 +78,8 @@ def _fetch_wb_data(indicators, country_iso, start_year, end_year, source):
 
         if not series_data:
             raise ValueError(
-                f"No dated observations in World Bank response for {indicator_code}"
+                "No dated observations in World Bank response "
+                f"for {indicator_code}"
             )
 
         series = pd.Series(series_data, name=label)
@@ -187,7 +188,8 @@ def _get_imf_macro_params(
 
     if available.empty:
         raise ValueError(
-            f"No complete IMF data available for {country_iso} up to {target_year}"
+            f"No complete IMF data available for {country_iso} "
+            f"up to {target_year}"
         )
 
     selected_year = (
@@ -250,7 +252,9 @@ def get_macro_params(
         "GDP per capita (constant 2015 US$)": "NY.GDP.PCAP.KD",
         "Real GDP (constant 2015 US$)": "NY.GDP.MKTP.KD",
         "Nominal GDP (current US$)": "NY.GDP.MKTP.CD",
-        "General government final consumption expenditure (current US$)": "NE.CON.GOVT.CD",
+        (
+            "General government final consumption expenditure (current US$)"
+        ): "NE.CON.GOVT.CD",
     }
     # Quarterly data
     wb_q_variable_dict = {
@@ -275,7 +279,7 @@ def get_macro_params(
                 source=20,
             )
 
-            # Function to get the latest valid data if baseline_YYYYQ is missing or NaN
+            # Get the latest valid data if baseline_YYYYQ is missing/NaN
             def get_valid_data(series, baseline_YYYYQ):
                 value = series.get(baseline_YYYYQ, None)
 
@@ -284,12 +288,15 @@ def get_macro_params(
 
                     if latest_non_nan is not None:
                         print(
-                            f"Warning: No data for {baseline_YYYYQ}. Using last available quarter: {latest_non_nan}"
+                            f"Warning: No data for {baseline_YYYYQ}. "
+                            f"Using last available quarter: "
+                            f"{latest_non_nan}"
                         )
                         value = series.get(latest_non_nan, None)
                     else:
                         print(
-                            "Warning: No historical data available. Skipping update."
+                            "Warning: No historical data available. "
+                            "Skipping update."
                         )
                         value = None
 
@@ -302,7 +309,8 @@ def get_macro_params(
                 baseline_YYYYQ,
             )
             print(
-                f"initial_debt_ratio updated from World Bank API: {macro_parameters['initial_debt_ratio']}"
+                "initial_debt_ratio updated from World Bank API: "
+                f"{macro_parameters['initial_debt_ratio']}"
             )
 
             # Compute initial_foreign_debt_ratio safely
@@ -327,11 +335,14 @@ def get_macro_params(
                 )
             else:
                 print(
-                    "Warning: Missing debt variables in World Bank data. Skipping update for initial_foreign_debt_ratio."
+                    "Warning: Missing debt variables in World Bank "
+                    "data. Skipping update for "
+                    "initial_foreign_debt_ratio."
                 )
 
             print(
-                f"initial_foreign_debt_ratio updated from World Bank API: {macro_parameters['initial_foreign_debt_ratio']}"
+                "initial_foreign_debt_ratio updated from World Bank "
+                f"API: {macro_parameters['initial_foreign_debt_ratio']}"
             )
 
             # Compute zeta_D safely
@@ -340,7 +351,8 @@ def get_macro_params(
             ]  # Since it's the same formula, we use the same calculated value
 
             print(
-                f"zeta_D updated from World Bank API: {macro_parameters['zeta_D']}"
+                "zeta_D updated from World Bank API: "
+                f"{macro_parameters['zeta_D']}"
             )
 
             # Compute annual GDP growth safely
@@ -355,11 +367,13 @@ def get_macro_params(
                 )
             else:
                 print(
-                    "Warning: Missing GDP per capita data in World Bank data. Skipping update for g_y_annual."
+                    "Warning: Missing GDP per capita data in World "
+                    "Bank data. Skipping update for g_y_annual."
                 )
 
             print(
-                f"g_y_annual updated from World Bank API: {macro_parameters['g_y_annual']}"
+                "g_y_annual updated from World Bank API: "
+                f"{macro_parameters['g_y_annual']}"
             )
         except Exception:
             print("Failed to retrieve data from World Bank")
@@ -394,7 +408,11 @@ def get_macro_params(
             )
             # Add headers
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/91.0.4472.124 Safari/537.36"
+                )
             }
 
             print("Attempting to update gamma from ILOSTAT")
@@ -479,10 +497,12 @@ def get_macro_params(
             macro_parameters["r_gov_shift"] = [-res.params[0] / 100]
             macro_parameters["r_gov_scale"] = [res.params[1]]
             print(
-                f"r_gov_shift updated from IMF data: {macro_parameters['r_gov_shift']}"
+                "r_gov_shift updated from IMF data: "
+                f"{macro_parameters['r_gov_shift']}"
             )
             print(
-                f"r_gov_scale updated from IMF data: {macro_parameters['r_gov_scale']}"
+                "r_gov_scale updated from IMF data: "
+                f"{macro_parameters['r_gov_scale']}"
             )
         except Exception:
             print("Failed to compute r_gov_shift, r_gov_scale")
