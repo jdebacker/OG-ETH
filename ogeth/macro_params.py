@@ -310,7 +310,6 @@ def get_macro_params(
                 "Gross PSD USD - external creditors" in wb_data_q.columns
                 and "Gross PSD USD - domestic creditors" in wb_data_q.columns
             ):
-
                 total_debt = (
                     wb_data_q["Gross PSD USD - domestic creditors"]
                     + wb_data_q["Gross PSD USD - external creditors"]

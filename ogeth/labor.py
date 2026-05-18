@@ -7,11 +7,8 @@ Computes the average labor participation rate for each age cohort.
 import os
 import numpy as np
 import pandas as pd
-import scipy.ndimage.filters as filter
 from scipy import interpolate
-import matplotlib
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 CUR_DIR = os.path.abspath(os.path.dirname(__file__))
 

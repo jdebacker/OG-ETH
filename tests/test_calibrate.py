@@ -3,7 +3,6 @@ Tests of calibrate.py module — offline and partial-failure behavior
 """
 
 import warnings
-import pytest
 import numpy as np
 from unittest.mock import MagicMock, patch
 from ogeth.calibrate import Calibration
