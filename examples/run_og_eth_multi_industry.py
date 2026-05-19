@@ -57,7 +57,7 @@ def main():
         .open("r") as file
     ):
         multi_defaults = json.load(file)
-    #NOTE: industries are (in order): Primary, Energy, Tertiary, Secondary
+    # NOTE: industries are (in order): Primary, Energy, Tertiary, Secondary
     # Consumer goods are (in order):Food, Energy, Non-durables, Durables, Services
     p.update_specifications(multi_defaults)
     # Update parameters from calibrate.py Calibration class
