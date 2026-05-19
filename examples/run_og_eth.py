@@ -14,7 +14,8 @@ from ogcore import output_plots as op
 from ogcore.execute import runner
 from ogcore.utils import safe_read_pickle
 from ogeth.utils import is_connected
-import ogcore
+import dask
+dask.config.set(scheduler='synchronous')
 
 # Use a custom matplotlib style file for plots
 plt.style.use("ogcore.OGcorePlots")
