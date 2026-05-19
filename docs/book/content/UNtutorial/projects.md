@@ -25,25 +25,34 @@ This sections contains the final project descriptions and materials in {numref}`
   - Project Description
   - Materials
 * - 1
-  - Impact of budgetary allocation on economic growth - education, health, income support spending programs, maybe including intergenerational impacts, employment/hours worked
+  - The macroeconomic impacts of conflict in Ethiopia (via infrastructure damage, mortality risk, and reduced economic activity)
   -
 * - 2
-  - Increasing the retirement age for public pensions + Changes to the contribution rate for public pensions (may pay particular attention to informal share who don’t contribute or benefit from public pension)
+  - Simulating a climate shock: agricultural productivity shock, mortality
   -
 * - 3
-  - Changes in the CIT - perhaps with size thresholds (e.g., changing effective rate based on firm size, perhaps industry specific)
+  - The economic, distributional, and fiscal impacts of removing the fuel subsidy in Ethiopia
   -
 * - 4
-  - Infrastructure investment, nutritious meals program - growth effects + Is the funding plan of the sovereign wealth fund sustainable?
+  - The Iran War oil shock: effects on prices and the fiscal cost of protecting consumers from the shock via fuel subsidies
   -
 * - 5
-  - Debt financing, stabilize debt-gdp ratio with future taxes. What is the burden on future generations. Maybe just something with gov’t spending allocations (eg mix of transfers to infrastructure) more broadly
+  - Changes in the social protection system: increasing generosity and progressivity
   -
 * - 6
-  - How does free education at university impact labor productivity, inequality – and fiscal cost of this (growth, distributional impacts)
+  - AI and automation: effects on labor markets, economic growth
   -
 * - 7
-  - Taxing fossil fuels/energy consumption
+  - Fiscal sustainability in Ethiopia: tax increases vs spending cuts
+  -
+* - 8
+  - Capital deepening in agriculture: the rise in tractors and it's effect on wages, inequality, and fiscal deficits
+  -
+* - 9
+  - Simulating capital liberalization: effects on capital flows, growth, and inequality,
+  -
+* - 10
+  - The economic benefits and fiscal costs of early childhood education programs in Ethiopia
   -
 ```
 
