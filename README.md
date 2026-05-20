@@ -35,9 +35,9 @@ There are two primary methods for installing and running OG-ETH on your computer
 * Run the model with an example reform: `uv run python run_og_eth.py` (or activate the venv first with `source .venv/bin/activate` on macOS/Linux or `.\.venv\Scripts\Activate.ps1` on Windows, then `python run_og_eth.py`).
 * You can adjust the `./examples/run_og_eth.py` by modifying model parameters specified in the dictionary passed to the `p.update_specifications()` calls.
 * Model outputs will be saved in the following files:
-  * `./examples/OG-ETH_example_plots`
+  * `./examples/OG-ETH-Example/OG-ETH_example_plots`
     * This folder will contain a number of plots generated from OG-Core to help you visualize the output from your run
-  * `./examples/ogeth_example_output.csv`
+  * `./examples/OG-ETH-Example/OG-ETH_example_output.csv`
     * This is a summary of the percentage changes in macro variables over the first ten years and in the steady-state.
   * `./examples/OG-ETH-Example/OUTPUT_BASELINE/model_params.pkl`
     * Model parameters used in the baseline run
@@ -48,7 +48,7 @@ There are two primary methods for installing and running OG-ETH on your computer
   * `./examples/OG-ETH-Example/OUTPUT_BASELINE/TPI/TPI_vars.pkl`
     * Outputs from the model timepath solution under the baseline policy
     * See [`ogcore.TPI.py`](https://github.com/PSLmodels/OG-Core/blob/master/ogcore/TPI.py) for what is in the dictionary object in this pickle file
-  * An analogous set of files in the `./examples/OUTPUT_REFORM` directory, which represent objects from the simulation of the reform policy
+  * An analogous set of files in the `./examples/OG-ETH-Example/OUTPUT_REFORM` directory, which represent objects from the simulation of the reform policy
 
 Note that, depending on your machine, a full model run (solving for the full time path equilibrium for the baseline and reform policies) can take from 35 minutes to more than two hours of compute time.
 
