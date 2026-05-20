@@ -1,38 +1,46 @@
 import pandas as pd
 import numpy as np
 import os
-from ogeth.utils import is_connected
 from ogeth.constants import CONS_DICT, PROD_DICT
 
+
+def norm(x):
+    return str(x).strip().casefold()
+
+
 CUR_DIR = os.path.dirname(os.path.realpath(__file__))
-"""
-Read in Social Accounting Matrix (SAM) file
-"""
-# Read in SAM file
-# SAM file:
-# Read in SAM file
-SAM_path = os.path.join(
-    "https://raw.githubusercontent.com/EAPD-DRB/OG-ETH/refs/heads/main/ogeth/data/IFPRI_SAM_ETH_2022_SAM.csv"
-)
+sam_path = os.path.join(CUR_DIR, "data", "IFPRI_SAM_ETH_2022_SAM.csv")
 
 
 def read_SAM():
-    if is_connected():
-        try:
-            SAM = pd.read_csv(SAM_path, index_col=1, thousands=",")
-            print("Successfully read SAM from Github repository.")
-            # replace NaN with 0
-            SAM.fillna(0, inplace=True)
-        except Exception as e:
-            print(f"Failed to read from the GitHub repository: {e}")
-            SAM = None
-        # If both attempts fail, SAM will be None
-        if SAM is None:
-            print("Failed to read SAM from both sources.")
-    else:  # pragma: no cover
-        SAM = None
-        print("No internet connection. SAM cannot be read.")
-    return SAM
+    """
+    Read the packaged Ethiopia SAM file.
+
+    Returns:
+        pd.DataFrame | None: parsed SAM table, or None if unavailable
+    """
+    try:
+        sam = pd.read_csv(
+            sam_path,
+            index_col=1,
+            thousands=",",
+        ).dropna(how="all")
+
+        # First column is descriptive text, not SAM values
+        label_col = sam.columns[0]
+        value_cols = sam.columns.drop(label_col)
+
+        # Convert only SAM value columns to numeric
+        sam[value_cols] = (
+            sam[value_cols]
+            .apply(lambda s: pd.to_numeric(s, errors="coerce"))
+            .fillna(0)
+        )
+
+        return sam
+    except Exception as exc:
+        print(f"Failed to read packaged SAM file: {exc}")
+        return None
 
 
 def get_alpha_c(sam=None, cons_dict=CONS_DICT):
@@ -51,13 +59,24 @@ def get_alpha_c(sam=None, cons_dict=CONS_DICT):
         sam = read_SAM()
     if sam is None:
         raise RuntimeError("SAM data is unavailable. Cannot compute alpha_c.")
+
+    hh_cols = [
+        "hhd-r1",
+        "hhd-r2",
+        "hhd-r3",
+        "hhd-r4",
+        "hhd-r5",
+        "hhd-u1",
+        "hhd-u2",
+        "hhd-u3",
+        "hhd-u4",
+        "hhd-u5",
+    ]
     alpha_c = {}
     overall_sum = 0
     for key, value in cons_dict.items():
-        # note the subtraction of the row to focus on domestic consumption
         category_total = (
-            sam.loc[sam.index.isin(value), "total"].sum()
-            - sam.loc[sam.index.isin(value), "row"].sum()
+            sam.loc[sam.index.isin(value), hh_cols].values.astype(float).sum()
         )
         alpha_c[key] = category_total
         overall_sum += category_total

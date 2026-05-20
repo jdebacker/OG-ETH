@@ -57,7 +57,7 @@ def main():
     # Update parameters from calibrate.py Calibration class
     if is_connected():  # only update if connected to internet
         c = Calibration(
-            p, update_from_api=True
+            p, update_from_api=False
         )  # =True will update data from online sources
         updated_params = c.get_dict()
         p.update_specifications(updated_params)

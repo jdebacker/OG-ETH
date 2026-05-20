@@ -295,7 +295,7 @@ def test_get_macro_params_update_from_api_true(monkeypatch):
     assert test_dict["initial_foreign_debt_ratio"] == 0.4
     assert test_dict["zeta_D"] == [0.4]
     assert test_dict["g_y_annual"] == pytest.approx(0.25)
-    assert test_dict["gamma"] == [0.6]
+    assert test_dict["gamma"] == [pytest.approx(0.50)]
     assert test_dict["alpha_T"] == [pytest.approx(0.036)]
     assert test_dict["alpha_G"] == [pytest.approx(0.241)]
     assert test_dict["r_gov_shift"] == [-0.01]

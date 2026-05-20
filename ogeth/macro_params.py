@@ -12,6 +12,9 @@ import datetime
 from io import StringIO
 from pathlib import Path
 
+# Public capital elasticity; see firms.md.
+GAMMA_G_LIC = 0.1
+
 
 def _fetch_wb_data(indicators, country_iso, start_year, end_year, source):
     """
@@ -370,10 +373,12 @@ def get_macro_params(
 
     """
     Retrieve labour share data from the United Nations ILOSTAT Data API
-    (see https://rshiny.ilo.org/dataexplorer9/?lang=en)
-    The series code is SDG_1041_NOC_RT_A (capital share)
-    Labor share (gamma) = 1 - capital share
-    If this fails we will not update gamma in 'default_parameters.json'
+    (see https://rshiny.ilo.org/dataexplorer9/?lang=en).
+    The series code is SDG_1041_NOC_RT_A (labour income share as a percent
+    of GDP). Total capital share equals 1 - labour share. We subtract
+    GAMMA_G_LIC, which matches the gamma_g value in
+    'default_parameters.json', to recover the private capital share gamma.
+    If this fails we will not update gamma in 'default_parameters.json'.
     """
     if update_from_api:
         try:
@@ -402,18 +407,15 @@ def get_macro_params(
             csv_content = StringIO(response.text)
             df_temp = pd.read_csv(csv_content)
             ilo_data = df_temp[["time", "obs_value"]]
-            # find gamma, capital's share of income
-            macro_parameters["gamma"] = [
-                1
-                - (
-                    (
-                        ilo_data.loc[
-                            ilo_data["time"] == data_end_date.year, "obs_value"
-                        ].squeeze()
-                    )
-                    / 100
-                )
-            ]
+            # find gamma (private capital share) by subtracting GAMMA_G_LIC
+            # from the ILOSTAT-derived total capital share.
+            labor_share = (
+                ilo_data.loc[
+                    ilo_data["time"] == data_end_date.year, "obs_value"
+                ].squeeze()
+                / 100
+            )
+            macro_parameters["gamma"] = [1 - labor_share - GAMMA_G_LIC]
             print(
                 f"gamma updated from ILOSTAT API: {macro_parameters['gamma']}"
             )
