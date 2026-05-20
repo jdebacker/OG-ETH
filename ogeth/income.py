@@ -192,7 +192,7 @@ def get_e_interp(
             pp.plot_income_data(
                 new_s_midp,
                 abil_midp,
-                abil_wgts,
+                abil_wgts,  # noqa: F821
                 emat_new_scaled,
                 plot_path,
                 **kwargs,
