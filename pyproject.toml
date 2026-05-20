@@ -89,6 +89,8 @@ ogeth = [
 [tool.ruff]
 line-length = 79
 target-version = "py311"
+# Notebooks are teaching artifacts, not package code (matches OG-Core).
+exclude = ["**/*.ipynb"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W"]

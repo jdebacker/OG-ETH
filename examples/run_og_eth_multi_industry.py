@@ -58,7 +58,8 @@ def main():
     ):
         multi_defaults = json.load(file)
     # NOTE: industries are (in order): Primary, Energy, Tertiary, Secondary
-    # Consumer goods are (in order):Food, Energy, Non-durables, Durables, Services
+    # Consumer goods are (in order): Food, Energy, Non-durables,
+    # Durables, Services
     p.update_specifications(multi_defaults)
     # Update parameters from calibrate.py Calibration class
     if is_connected():  # only update if connected to internet
