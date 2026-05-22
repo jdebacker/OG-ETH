@@ -57,6 +57,8 @@ def main():
         .open("r") as file
     ):
         multi_defaults = json.load(file)
+    # NOTE: industries are (in order): Primary, Energy, Tertiary, Secondary
+    # Consumer goods are (in order):Food, Energy, Non-durables, Durables, Services
     p.update_specifications(multi_defaults)
     # Update parameters from calibrate.py Calibration class
     if is_connected():  # only update if connected to internet
@@ -69,6 +71,7 @@ def main():
             del updated_params["gamma"]
         p.update_specifications(updated_params)
 
+    print("IO Matrix for baseline:", p.io_matrix)
     # Run model
     start_time = time.time()
     runner(p, time_path=True, client=client)
