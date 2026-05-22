@@ -156,8 +156,8 @@ def get_e_interp(
             1 - usa_params.lambdas[-1]
         ):
             err = (
-                "One or more entries in abilities vector (lambdas) is outside the "
-                + "allowable bounds for interpolation."
+                "One or more entries in abilities vector (lambdas) "
+                "is outside the allowable bounds for interpolation."
             )
             raise RuntimeError(err)
         usa_step = 80 / usa_params.S
@@ -192,7 +192,7 @@ def get_e_interp(
             pp.plot_income_data(
                 new_s_midp,
                 abil_midp,
-                abil_wgts,
+                abil_wgts,  # noqa: F821
                 emat_new_scaled,
                 plot_path,
                 **kwargs,

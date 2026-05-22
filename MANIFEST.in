@@ -1,1 +1,3 @@
 include ogeth/ogeth_default_parameters.json
+include ogeth/ogeth_multi_industry_parameters.json
+include ogeth/data/*

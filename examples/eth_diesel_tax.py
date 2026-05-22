@@ -8,14 +8,11 @@ import copy
 import numpy as np
 from importlib.resources import files
 import matplotlib.pyplot as plt
-from ogeth.calibrate import Calibration
 from ogcore.parameters import Specifications
 from ogcore import output_tables as ot
 from ogcore import output_plots as op
 from ogcore.execute import runner
 from ogcore.utils import safe_read_pickle
-from ogeth.utils import is_connected
-import ogcore
 from diesel_sam import CONS_DICT, PROD_DICT
 from ogeth import input_output as io
 
