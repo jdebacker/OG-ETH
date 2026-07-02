@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+* Raised the Python floor to `>=3.12` (matching CI and ogcore's own `>=3.12` requirement; classifiers and the ruff target follow) and relocked to a single `ogcore 0.16.3`, matching OG-ZAF and OG-IDN. This removes the stale Python 3.11 resolution branch that pinned an older ogcore.
+
 ### Fixed
 * Fixed the demographic `country_id` in `calibrate.py`, which pulled South Africa (UN code 710) data instead of Ethiopia (231), and regenerated the baseline demographics in `ogeth_default_parameters.json`. Steady-state population growth corrects from 0.4% to 2.0%; macro parameters are unchanged.
 
