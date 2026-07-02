@@ -11,7 +11,7 @@ authors = [
 description = "Ethiopia Calibration for OG-Core"
 readme = "README.md"
 license = {text = "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication"}
-requires-python = ">=3.11, <3.14"
+requires-python = ">=3.12, <3.14"
 keywords = [
     "ETH",
     "Ethiopia",
@@ -27,7 +27,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Information Analysis",
@@ -88,7 +87,7 @@ ogeth = [
 
 [tool.ruff]
 line-length = 79
-target-version = "py311"
+target-version = "py312"
 # Notebooks are teaching artifacts, not package code (matches OG-Core).
 exclude = ["**/*.ipynb"]
 
