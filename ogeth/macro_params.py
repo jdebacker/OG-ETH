@@ -15,6 +15,11 @@ from pathlib import Path
 # Public capital elasticity; see firms.md.
 GAMMA_G_LIC = 0.1
 
+# Start year for the g_y_annual average-growth calculation; matches the
+# documented window in macro.md (average annual GDP-per-capita growth
+# 2006-2024 = 6.0%).
+G_Y_START_YEAR = 2006
+
 
 def _fetch_wb_data(indicators, country_iso, start_year, end_year, source):
     """
@@ -236,12 +241,6 @@ def get_macro_params(
     """
     # initialize a dictionary of parameters
     macro_parameters = {}
-    # baseline date formatted for World Bank data
-    baseline_YYYYQ = (
-        str(data_end_date.year)
-        + "Q"
-        + str(pd.Timestamp(data_end_date).quarter)
-    )
 
     """
     Retrieve data from the World Bank World Development Indicators.
@@ -256,12 +255,11 @@ def get_macro_params(
             "General government final consumption expenditure (current US$)"
         ): "NE.CON.GOVT.CD",
     }
-    # Quarterly data
-    wb_q_variable_dict = {
-        "Gross PSD USD - domestic creditors": "DP.DOD.DECD.CR.PS.CD",
-        "Gross PSD USD - external creditors": "DP.DOD.DECX.CR.PS.CD",
-        "Gross PSD Gen Gov - percentage of GDP": "DP.DOD.DECT.CR.GG.Z1",
-    }
+    # Quarterly public-sector-debt (QPSD) indicators are intentionally
+    # not fetched for OG-ETH: the World Bank QPSD database has no Ethiopia
+    # data. The debt parameters (initial_debt_ratio,
+    # initial_foreign_debt_ratio, zeta_D) are hand-calibrated from the
+    # Ethiopia MoF Public Sector Debt Bulletin No. 51 (see macro.md).
     if update_from_api:
         try:
             wb_data_a = _fetch_wb_data(
@@ -271,116 +269,32 @@ def get_macro_params(
                 data_end_date.year,
                 source=2,
             )
-            wb_data_q = _fetch_wb_data(
-                wb_q_variable_dict,
-                country_iso,
-                data_start_date.year,
-                data_end_date.year,
-                source=20,
-            )
-
-            # Get the latest valid data if baseline_YYYYQ is missing/NaN
-            def get_valid_data(series, baseline_YYYYQ):
-                value = series.get(baseline_YYYYQ, None)
-
-                if pd.isna(value):
-                    latest_non_nan = series.dropna().last_valid_index()
-
-                    if latest_non_nan is not None:
-                        print(
-                            f"Warning: No data for {baseline_YYYYQ}. "
-                            f"Using last available quarter: "
-                            f"{latest_non_nan}"
-                        )
-                        value = series.get(latest_non_nan, None)
-                    else:
-                        print(
-                            "Warning: No historical data available. "
-                            "Skipping update."
-                        )
-                        value = None
-
-                return value
-
-            # Compute macro parameters from WB data
-            macro_parameters["initial_debt_ratio"] = get_valid_data(
-                pd.Series(wb_data_q["Gross PSD Gen Gov - percentage of GDP"])
-                / 100,
-                baseline_YYYYQ,
-            )
-            print(
-                "initial_debt_ratio updated from World Bank API: "
-                f"{macro_parameters['initial_debt_ratio']}"
-            )
-
-            # Compute initial_foreign_debt_ratio safely
-            if (
-                "Gross PSD USD - external creditors" in wb_data_q.columns
-                and "Gross PSD USD - domestic creditors" in wb_data_q.columns
-            ):
-                total_debt = (
-                    wb_data_q["Gross PSD USD - domestic creditors"]
-                    + wb_data_q["Gross PSD USD - external creditors"]
-                )
-
-                # Avoid division by zero
-                wb_data_q["foreign_debt_ratio"] = wb_data_q[
-                    "Gross PSD USD - external creditors"
-                ] / total_debt.replace(0, np.nan)
-
-                macro_parameters["initial_foreign_debt_ratio"] = (
-                    get_valid_data(
-                        wb_data_q["foreign_debt_ratio"], baseline_YYYYQ
-                    )
-                )
-            else:
-                print(
-                    "Warning: Missing debt variables in World Bank "
-                    "data. Skipping update for "
-                    "initial_foreign_debt_ratio."
-                )
-
-            print(
-                "initial_foreign_debt_ratio updated from World Bank "
-                f"API: {macro_parameters['initial_foreign_debt_ratio']}"
-            )
-
-            # Compute zeta_D safely
-            macro_parameters["zeta_D"] = [
-                macro_parameters["initial_foreign_debt_ratio"]
-            ]  # Since it's the same formula, we use the same calculated value
-
-            print(
-                "zeta_D updated from World Bank API: "
-                f"{macro_parameters['zeta_D']}"
-            )
-
-            # Compute annual GDP growth safely
+            # Compute annual GDP-per-capita growth (g_y_annual) from the
+            # World Bank WDI series, averaging pct_change from
+            # G_Y_START_YEAR onward to match the documented window (see
+            # macro.md). Debt parameters are not derived here (see note
+            # above).
             if "GDP per capita (constant 2015 US$)" in wb_data_a.columns:
-                g_y_series = wb_data_a[
-                    "GDP per capita (constant 2015 US$)"
-                ].pct_change(-1)
+                gdp_pc = wb_data_a["GDP per capita (constant 2015 US$)"]
+                gdp_pc = gdp_pc[gdp_pc.index.astype(int) >= G_Y_START_YEAR]
+                g_y_series = gdp_pc.pct_change(-1)
 
                 # If all values are NaN, return None
                 macro_parameters["g_y_annual"] = (
                     g_y_series.mean() if not g_y_series.isna().all() else None
+                )
+                print(
+                    "g_y_annual updated from World Bank API: "
+                    f"{macro_parameters['g_y_annual']}"
                 )
             else:
                 print(
                     "Warning: Missing GDP per capita data in World "
                     "Bank data. Skipping update for g_y_annual."
                 )
-
-            print(
-                "g_y_annual updated from World Bank API: "
-                f"{macro_parameters['g_y_annual']}"
-            )
         except Exception:
             print("Failed to retrieve data from World Bank")
-            print("Will not update the following parameters:")
-            print(
-                "[initial_debt_ratio, initial_foreign_debt_ratio, zeta_D, g_y]"
-            )
+            print("Will not update g_y_annual")
     else:
         print("Not updating from World Bank API")
 
@@ -443,31 +357,16 @@ def get_macro_params(
         print("Not updating from ILOSTAT API")
 
     """
-    Calibrate parameters from IMF data
+    Estimate r_gov_shift and r_gov_scale (Li, Magud, Werner 2021 method).
     """
 
+    # alpha_T and alpha_G are NOT pulled from the IMF API for OG-ETH: the
+    # IMF SDMX endpoint returns only 2002-vintage data for Ethiopia, and
+    # the documented sources differ (alpha_G -> World Bank NE.CON.GOVT.ZS;
+    # alpha_T -> IMF GFS + IMF Country Report 25/188, hand-combined). Both
+    # stay at the committed values in macro.md. _get_imf_macro_params is
+    # retained (tested independently) for reuse if wired to the right data.
     if update_from_api:
-        try:
-            imf_year = (
-                data_end_date.year if imf_data_year is None else imf_data_year
-            )
-            macro_parameters.update(
-                _get_imf_macro_params(
-                    country_iso,
-                    imf_year,
-                    data_path=imf_data_path,
-                )
-            )
-            print(
-                f"alpha_T updated from IMF data: {macro_parameters['alpha_T']}"
-            )
-            print(
-                f"alpha_G updated from IMF data: {macro_parameters['alpha_G']}"
-            )
-        except Exception:
-            print("Failed to retrieve data from IMF")
-            print("Will not update alpha_T, alpha_G")
-
         """"
         Estimate the discount on sovereign yields relative to private debt
         Follow the methodology in Li, Magud, Werner, Witte (2021)
@@ -497,17 +396,17 @@ def get_macro_params(
             macro_parameters["r_gov_shift"] = [-res.params[0] / 100]
             macro_parameters["r_gov_scale"] = [res.params[1]]
             print(
-                "r_gov_shift updated from IMF data: "
+                "r_gov_shift computed (LMW 2021 method): "
                 f"{macro_parameters['r_gov_shift']}"
             )
             print(
-                "r_gov_scale updated from IMF data: "
+                "r_gov_scale computed (LMW 2021 method): "
                 f"{macro_parameters['r_gov_scale']}"
             )
         except Exception:
             print("Failed to compute r_gov_shift, r_gov_scale")
             print("Will not update r_gov_shift, r_gov_scale")
     else:
-        print("Not updating alpha_T, alpha_G, r_gov_shift, r_gov_scale")
+        print("Not computing r_gov_shift, r_gov_scale")
 
     return macro_parameters

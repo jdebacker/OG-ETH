@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 * Raised the Python floor to `>=3.12` (matching CI and ogcore's own `>=3.12` requirement; classifiers and the ruff target follow) and relocked to a single `ogcore 0.16.3`, matching OG-ZAF and OG-IDN. This removes the stale Python 3.11 resolution branch that pinned an older ogcore.
+* Regenerated the baseline demographics in `ogeth_default_parameters.json` under ogcore 0.16.3, which reworks the pre-time-path population distribution (PSLmodels/OG-Core#1073): the transition-path arrays (`omega`, `g_n`, `imm_rates`, `rho`) shift by one period and three period-0 seeds (`g_n_preTP`, `imm_rates_preTP`, `rho_preTP`) are added.
+* Limited the `update_from_api` macro calibration to the sources that are authoritative for Ethiopia: `g_y_annual` (World Bank WDI) and `gamma` (UN ILOSTAT) still update, while the World Bank QPSD debt pull and the IMF `alpha_T`/`alpha_G` pull are switched off (QPSD has no Ethiopia data; the IMF series returns only 2002 values). Debt ratios, `alpha_G`, `alpha_T`, and `r_gov_*` stay at the documented values in `calibration/macro.md`. This refreshes `g_y_annual` (0.060 → 0.0595) and `gamma` (0.518 → 0.517).
 
 ### Fixed
 * Fixed the demographic `country_id` in `calibrate.py`, which pulled South Africa (UN code 710) data instead of Ethiopia (231), and regenerated the baseline demographics in `ogeth_default_parameters.json`. Steady-state population growth corrects from 0.4% to 2.0%; macro parameters are unchanged.
