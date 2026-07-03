@@ -278,65 +278,22 @@ def test_get_macro_params_update_from_api_true(monkeypatch):
     test_dict = macro_params.get_macro_params(update_from_api=True)
 
     assert isinstance(test_dict, dict)
+    # Debt (initial_debt_ratio, initial_foreign_debt_ratio, zeta_D) and
+    # IMF-sourced alpha_T/alpha_G are no longer pulled for OG-ETH (see
+    # macro_params.py / macro.md); only g_y_annual (WB WDI), gamma
+    # (ILOSTAT), and the deterministic r_gov_* are returned.
     assert sorted(test_dict.keys()) == sorted(
         [
             "r_gov_shift",
             "r_gov_scale",
-            "alpha_T",
-            "alpha_G",
-            "initial_debt_ratio",
             "g_y_annual",
             "gamma",
-            "zeta_D",
-            "initial_foreign_debt_ratio",
         ]
     )
-    assert test_dict["initial_debt_ratio"] == 0.5
-    assert test_dict["initial_foreign_debt_ratio"] == 0.4
-    assert test_dict["zeta_D"] == [0.4]
     assert test_dict["g_y_annual"] == pytest.approx(0.25)
     assert test_dict["gamma"] == [pytest.approx(0.50)]
-    assert test_dict["alpha_T"] == [pytest.approx(0.036)]
-    assert test_dict["alpha_G"] == [pytest.approx(0.241)]
     assert test_dict["r_gov_shift"] == [-0.01]
     assert test_dict["r_gov_scale"] == [0.5]
-
-
-def test_get_macro_params_uses_last_valid_quarter(monkeypatch):
-    _mock_statsmodels(monkeypatch)
-    _mock_requests_get(
-        monkeypatch,
-        {
-            "NY.GDP.PCAP.KD": _wb_payload(
-                [("2022", 64.0), ("2024", 100.0), ("2023", 80.0)]
-            ),
-            "NY.GDP.MKTP.KD": _wb_payload(
-                [("2022", 640.0), ("2024", 1000.0), ("2023", 800.0)]
-            ),
-            "NY.GDP.MKTP.CD": _wb_payload(
-                [("2022", 700.0), ("2024", 1100.0), ("2023", 900.0)]
-            ),
-            "NE.CON.GOVT.CD": _wb_payload(
-                [("2022", 200.0), ("2024", 250.0), ("2023", 225.0)]
-            ),
-            "DP.DOD.DECD.CR.PS.CD": _wb_payload(
-                [("2024Q4", None), ("2024Q3", 60.0), ("2024Q2", None)]
-            ),
-            "DP.DOD.DECX.CR.PS.CD": _wb_payload(
-                [("2024Q4", None), ("2024Q3", 40.0), ("2024Q2", None)]
-            ),
-            "DP.DOD.DECT.CR.GG.Z1": _wb_payload(
-                [("2024Q4", None), ("2024Q3", 50.0), ("2024Q2", None)]
-            ),
-        },
-        ilo_text="time,obs_value\n2024,40\n2023,39\n",
-    )
-
-    test_dict = macro_params.get_macro_params(update_from_api=True)
-
-    assert test_dict["initial_debt_ratio"] == 0.5
-    assert test_dict["initial_foreign_debt_ratio"] == 0.4
-    assert test_dict["zeta_D"] == [0.4]
 
 
 def test_get_imf_macro_params_overwrites_saved_file(monkeypatch, tmp_path):
